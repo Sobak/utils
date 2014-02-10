@@ -1,7 +1,13 @@
 <?php
 class logger {
+	private $config;
+	
+	public function __construct(array $config) {
+		$this->config = $config;
+	}
+
 	public function add_event($error_description, $additional_message, $error_level) {	
-		$log = unserialize(file_get_contents('logs/log.log'));
+		$log = unserialize(file_get_contents($this->config['file_path']));
 		
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 		$ip = ip2long($_SERVER['REMOTE_ADDR']);
@@ -15,6 +21,6 @@ class logger {
 			'ip' => $ip, 
 			'time' => $time);
 		
-		file_put_contents('logs/log.log', serialize($log));
+		file_put_contents($this->config['file_path'], serialize($log));
 	}
 }
